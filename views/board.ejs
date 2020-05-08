@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to HyperDev!</title>
+    <meta name="description" content="A cool thing made with HyperDev">
+    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/style.css">
+  </head>
+  <body>
+    <header>
+      <h1 id='boardTitle'>board name: <%=board.name%></h1>
+    </header>
+    
+    <div id='submitNewThread'>
+      <h3>Submit a new thread:</h3>
+      <form id="newThread" method="post" action="/api/threads/<%=board.name%>">
+        <textarea rows="8" cols="120" type='text' placeholder='Thread text...' name='text' required=''></textarea><br>
+        <input type='text' placeholder='password to delete' name='delete_password' required=''><br>
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+      <% if(threads){ %>
+        <div id='display-threads-container'>
+          <% threads.forEach(thread=>{ %>
+        
+          <div class="thread-container">
+            <h4 id="thread-title"><%=thread.text%></h4>
+            <div><span class='blue-letter'>THREAD_ID:</span> <%=thread.id%></div>
+            <div><span class='blue-letter'>CREATED_ON:</span> <%=thread.created_on%></div>
+            <!-- Reply text area -->
+            <div class="reply-container">
+              <form action="/api/replies/<%=board.name%>" method="POST">
+                <input type="hidden" name="id" value="<%=thread._id%>">
+                <div class="input-label-container">
+                  <label for="delete_password">PASSWORD TO DELETE THREAD:</label>
+                  <input type="text" name="delete_password" id='delete_password' placeholder="Delete Password For Reply">
+                </div>
+                <div class="input-label-container">
+                  <label for="text">REPLY:</label>
+                  <textarea name="text" id="text-input" cols="50" rows="5" placeholder="Reply Text"></textarea>
+                </div>
+        
+                <button id="submit-reply-button">SUBMIT REPLY</button>
+              </form>
+            </div>
+            <div class="buttons-container">
+              <!-- Report through PUT route -->
+              <form action="/api/threads/<%=board.name%>?_method=PUT" method="POST">
+                <input type="hidden" name="id" value="<%=thread._id%>">
+                <button>REPORT</button>
+              </form>
+              <form id="delete-password-form" method="POST" action="/api/threads/<%=board.name%>?_method=DELETE">
+                <input type="hidden" name="id" value="<%=thread.id%>">
+                <input type="password" name="delete_password" placeholder="password">
+                <button>DELETE</button>
+              </form>
+              <a href="/api/replies/<%=board.name%>?thread_id=<%=thread.id%>">SEE ALL REPLIES</a>
+              <a href="/api/replies/<%=board.name%>?thread_id=<%=thread.id%>&delete=allowed">SEE ALL REPLIES WITH DELETION</a>
+        
+            </div>
+          </div>
+        
+          <% }) %>
+        </div>
+      <% } %>
+    <hr style='margin: 50px; margin-top: 200px'>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome to HyperDev!</title>
+    <meta name="description" content="A cool thing made with HyperDev">
+    <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/board.css">
+</head>
+
+<body>
+    <header>
+        <h1 id='board-title'>board name: <%=board.name%></h1>
+    </header>
+<% if(threads){ %>
+<div id='display-threads-container'>
+    <% threads.forEach(thread=>{ %>
+    <div class="thread-container">
+        <h4 id="thread-title"><%=thread.text%></h4>
+        <div><span class='blue-letter'>THREAD_ID:</span> <%=thread.id%></div>
+        <div><span class='blue-letter'>CREATED_ON:</span> <%=thread.created_on%></div>
+        <div>
+            <h5>REPLIES</h5>
+            <% if(thread.replies){ %>
+                <% thread.replies.forEach(reply=>{ %>
+                    <div><%=reply.text%></div>
+                <% }) %>
+            <% } %>
+        </div>
+    </div>
+    <% }) %>
+</div>
+<% } %>
+
+</body>
+</html>

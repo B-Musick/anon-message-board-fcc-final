@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Welcome to HyperDev!</title>
+  <meta name="description" content="A cool thing made with HyperDev">
+  <link id="favicon" rel="icon" href="https://hyperdev.com/favicon-app.ico" type="image/x-icon">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/public/thread.css">
+</head>
+
+<body>
+  <header>
+    <h1 id='thread-title'><%=thread.text%></h1>
+  </header>
+  <% if(deletions){ %>
+  <div id="replies-container">
+    <% thread.replies.forEach(reply=>{ %>
+    <div class="reply-container">
+      <h4><%=reply.text%></h4>
+
+      <form action="/api/replies/<%=thread.board%>?_method=DELETE" method="POST">
+        <input type="hidden" name="reply_id" value="<%=reply._id%>">
+        <input type="hidden" name="thread_id" value="<%=thread.name%>">
+        <input type="text" name="delete_password" placeholder="Password To Delete">
+        <button>DELETE</button>
+      </form>
+
+      <form action="/api/replies/<%=thread.board%>?_method=PUT" method="POST">
+        <input type="hidden" name="reply_id" value="<%=reply._id%>">
+        <input type="hidden" name="thread_id" value="<%=thread.name%>">
+        <button>REPORT</button>
+      </form>
+
+    </div>
+
+    <% }) %>
+  </div>
+  <% }else {%>
+  <div id="replies-container">
+    <% thread.replies.forEach(reply=>{ %>
+    <div class="reply-container">
+      <h4><%=reply.text%></h4>
+      <%if(query){%>
+      <!-- If getting through thread_id query, dont show delete or report -->
+      <%}else{%>
+      <form action="/api/replies/<%=thread.board%>?_method=DELETE" method="POST">
+        <label for="reply_id">reply_id</label>
+        <input type="text" name="reply_id" value="<%=reply._id%>" placeholder="Password To Delete">
+        <!-- <label for="thread_id">thread_id</label>
+        <input type="text" name="thread_id" value="<%=thread.text%>" placeholder="<%=thread.text%>"> -->
+        <label for="delete_password">input delete_password</label>
+        <input type="text" name="delete_password" placeholder="Password To Delete">
+        <button>DELETE</button>
+      </form>
+      <%}%>
+          </div>
+    
+        <% }) %>
+    </div>
+    <% } %>
+    <br>
+
+    <div id='boardDisplay'></div>
+
+    <hr style='margin: 50px; margin-top: 200px'>
+
+</body>
+
+</html>
